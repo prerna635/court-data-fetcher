@@ -24,5 +24,5 @@ A simple Flask-based web application to **simulate fetching court case data** by
 
 ---
 
-## 📁 Project Structure
+
 
