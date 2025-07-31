@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Court Case Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f5f7fa;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            max-width: 600px;
+            margin: auto;
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #004085;
+            margin-bottom: 20px;
+        }
+
+        .result-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .result-group strong {
+            color: #333;
+        }
+
+        .result-group span {
+            color: #555;
+        }
+
+        a.download-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 16px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a.download-link:hover {
+            background-color: #0056b3;
+        }
+
+        .back-btn {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 8px 14px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .back-btn:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Case Details</h1>
+
+        <div class="result-group">
+            <strong>Parties Involved: </strong>
+            <span>{{ court_data.parties }}</span>
+        </div>
+        <div class="result-group">
+            <strong>Filing Date: </strong>
+            <span>{{ court_data.filing_date }}</span>
+        </div>
+        <div class="result-group">
+            <strong>Next Hearing Date: </strong>
+            <span>{{ court_data.next_hearing }}</span>
+        </div>
+        <div class="result-group">
+            <strong>Latest Order: </strong>
+            <a class="download-link" href="{{ court_data.latest_order_link }}" target="_blank">Download PDF</a>
+        </div>
+
+        <a class="back-btn" href="{{ url_for('home') }}">Back to Search</a>
+    </div>
+</body>
+</html>
