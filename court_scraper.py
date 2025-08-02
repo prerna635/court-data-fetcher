@@ -1,32 +1,34 @@
 import requests
 from bs4 import BeautifulSoup
 
-def fetch_case_data(case_type, case_number, year):
-    url = "https://services.ecourts.gov.in/ecourtindia_v6/"
+def get_case_details(cnr_number, captcha_input):
+    session = requests.Session()
+    base_url = "https://services.ecourts.gov.in/ecourtindia_v6/"
+
+    # Step 1: Get the main search page to grab cookies
+    initial_response = session.get(base_url + "casestatus/cnr-search.php")
     
+    # Step 2: Prepare the payload
     payload = {
-        "stateCode": "HR",
-        "distCode": "FBD",
-        "caseType": case_type,
-        "caseNo": case_number,
-        "caseYear": year
+        "cnrno": cnr_number,
+        "captcha": captcha_input,
+        "submit": "Search"
     }
 
-    session = requests.Session()
-    response = session.post(url, data=payload)
-    soup = BeautifulSoup(response.text, "html.parser")
+    # Step 3: Send POST request
+    search_url = base_url + "casestatus/cnr-search.php"
+    headers = {
+        "Referer": search_url,
+        "User-Agent": "Mozilla/5.0"
+    }
+    
+    response = session.post(search_url, data=payload, headers=headers)
 
-    # Sample parsing logic – adjust to match actual HTML structure
-    petitioner = soup.find("td", text="Petitioner").find_next("td").text.strip()
-    respondent = soup.find("td", text="Respondent").find_next("td").text.strip()
-    filing_date = soup.find("td", text="Filing Date").find_next("td").text.strip()
-    next_hearing = soup.find("td", text="Next Hearing Date").find_next("td").text.strip()
-    pdf_url = soup.find("a", text="View Order")["href"]
+    soup = BeautifulSoup(response.content, "html.parser")
+    case_info = soup.find("div", {"class": "case_details_table"})
 
-    return {
-        "petitioner": petitioner,
-        "respondent": respondent,
-        "filing_date": filing_date,
-        "next_hearing": next_hearing,
-        "pdf_url": pdf_url
-    }, response.text
+    if case_info:
+        return case_info.prettify()
+    else:
+        return "<p>❌ Case not found or CAPTCHA incorrect. Please try again.</p>"
+
