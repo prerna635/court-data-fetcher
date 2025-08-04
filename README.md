@@ -16,12 +16,6 @@ It scrapes data directly from the [eCourts portal](https://services.ecourts.gov.
 
 ---
 
-## 🖼️ Sample UI
-
-<img src="static/court.png" alt="UI Preview" width="500">
-
----
-
 ## 🚀 How It Works
 
 1. User enters a valid CNR number (e.g., MHSV020000002021)
