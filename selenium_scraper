@@ -1,0 +1,27 @@
+import sys
+import time
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
+
+def launch_browser(cnr_number):
+    options = Options()
+    options.add_experimental_option("detach", True)  # Keep browser open
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+
+    driver.get("https://services.ecourts.gov.in/ecourtindia_v6/casestatus/cnr-search.php")
+    time.sleep(2)
+
+    cnr_input = driver.find_element(By.ID, "cnrno")
+    cnr_input.send_keys(cnr_number)
+
+    print("✅ CNR number entered.")
+    print("⚠️ Please solve the CAPTCHA manually and click Submit in browser.")
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        launch_browser(sys.argv[1])
+    else:
+        print("❌ CNR number not provided.")

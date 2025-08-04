@@ -1,25 +1,17 @@
+# log_queries.py
 import sqlite3
 from datetime import datetime
 
-def log_query(case_type, case_number, filing_year, raw_response):
-    conn = sqlite3.connect('query_logs.db')
+def log_query(cnr_number):
+    conn = sqlite3.connect('queries.db')
     c = conn.cursor()
-    
     c.execute('''
-        CREATE TABLE IF NOT EXISTS logs (
+        CREATE TABLE IF NOT EXISTS queries (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            case_type TEXT,
-            case_number TEXT,
-            filing_year TEXT,
-            timestamp TEXT,
-            raw_response TEXT
+            cnr TEXT,
+            timestamp TEXT
         )
     ''')
-    
-    c.execute('''
-        INSERT INTO logs (case_type, case_number, filing_year, timestamp, raw_response)
-        VALUES (?, ?, ?, ?, ?)
-    ''', (case_type, case_number, filing_year, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), raw_response))
-    
+    c.execute('INSERT INTO queries (cnr, timestamp) VALUES (?, ?)', (cnr_number, datetime.now()))
     conn.commit()
     conn.close()
